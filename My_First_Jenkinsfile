@@ -11,7 +11,7 @@
 #            NOTES:
 #            AUTHOR:                  Chen
 #            CREATE:                  2017.12.02
-#            REVISION:                V2.1
+#            REVISION:                V2.2
 #            HISTORY：                
 #
 #
@@ -28,6 +28,7 @@ pipeline {
             steps{
               sh 'echo "Preparing Environment"'
               sh 'cd /tmp'
+              sh 'rm -rf ROOT'
               sh 'git clone https://github.com/banyejinghungui/ROOT.git'
               sh 'scp -rf ROOT root@192.168.19.131:/tmp/DevOps_Code_Temp_Git_Download/'
               sh 'rm -rf ROOT'
