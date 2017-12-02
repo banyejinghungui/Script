@@ -1,10 +1,36 @@
+/*++++++++++++++++++++++ Script Start ++++++++++++++++++++++++
+#！/bin/bash
+# ======================= Instruction ================================
+#            FILE:                      My_First_Jenkinsfile.sh
+#            USAGE:
+
+#            DESCRIPTION:             Releasing Jenkinsfile
+#            OPTIONS:--
+#            REQUIREMENTS:
+#            BUGS:
+#            NOTES:
+#            AUTHOR:                  Chen
+#            CREATE:                  2017.12.02
+#            REVISION:                V1.1
+#            HISTORY：                V1.1---added a feature to display the state of the website right after the releasing
+#
+#
+#            Test:
+#            PROCESURE：
+# ========================================================
+*/
+
 pipeline {
       agent any
 
       stages {
-          stage('Prepare Environment 2th'){
+          stage('Prepare Environment'){
             steps{
               sh 'echo "Preparing Environment"'
+              sh 'cd /tmp'
+              sh 'git clone https://github.com/banyejinghungui/ROOT.git'
+              sh 'scp -rf ROOT ssh root@192.168.19.131:/tmp/DevOps_Code_Temp_Git_Download/'
+              sh 'rm -rf ROOT'
             }
           }
 
@@ -23,6 +49,12 @@ pipeline {
           stage('Build'){
             steps {
               sh 'echo "Building..."'
+              sh 'ssh root@192.168.19.131 source /etc/profile'
+              sh 'ssh root@192.168.19.131 sh /usr/local/tomcat8_8080/bin/shutdown.sh'
+              sh 'ssh root@192.168.19.131 rm -rf  /usr/local/tomcat8_8080/webapps/ROOT'
+              sh 'ssh root@192.168.19.131 cp -rf /tmp/DevOps_Code_Temp_Git_Download/ROOT /usr/local/tomcat8_8080/webapps/'
+              sh 'ssh root@192.168.19.131 sh /usr/local/tomcat8_8080/bin/startup.sh'
+              sh 'ssh root@192.168.19.131 rm -rf /tmp/DevOps_Code_Temp_Git_Download/ROOT'
               sh 'echo "Done! And Cleaning..."'
             }
           }
