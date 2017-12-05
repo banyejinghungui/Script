@@ -1,0 +1,60 @@
+/*++++++++++++++++++++++ Script Start ++++++++++++++++++++++++
+#！/bin/bash
+# ======================= Instruction ================================
+#            FILE:                      Docker_Jenkinsfile.sh
+#            USAGE:
+
+#            DESCRIPTION:             Release Docker Tomcat
+#            OPTIONS:--
+#            REQUIREMENTS:
+#            BUGS:
+#            NOTES:
+#            AUTHOR:                  Chen
+#            CREATE:                  2017.12.04
+#            REVISION:                V1.0
+#            HISTORY：                
+#
+#
+#            Test:
+#            PROCESURE：
+# ========================================================
+*/
+
+pipeline {
+      agent any
+
+      stages {
+          stage('Prepare Environment'){
+            steps{
+              sh 'echo "Preparing Environment"'
+              sh 'cd /tmp'
+              sh 'rm -rf ROOT'
+              sh 'git clone https://github.com/banyejinghungui/ROOT.git'
+              sh 'scp -r ROOT root@192.168.19.133:/tmp'
+              sh 'rm -rf ROOT'
+            }
+          }
+
+          stage('Code Analyse'){
+            steps {
+              sh 'echo "Run some lints"'
+            }
+          }
+
+          stage('Unit Test'){
+            steps {
+              sh 'echo "Tests will back"'
+            }
+          }
+
+          stage('Build'){
+            steps {
+              sh 'echo "Building..."'
+              sh 'ssh root@192.168.19.133 docker stop tomcat8'
+              sh 'ssh root@192.168.19.133 docker run -it --rm -p 8888:8080 --name tomcat8 -v /tmp/ROOT:/usr/local/tomcat/webapps/ROOT tomcat:8.0 ' 
+              sh 'echo "Done! And Cleaning..."'
+            }
+          }
+      }
+
+}
