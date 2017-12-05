@@ -11,8 +11,8 @@
 #            NOTES:
 #            AUTHOR:                  Chen
 #            CREATE:                  2017.12.04
-#            REVISION:                V1.0
-#            HISTORY：                
+#            REVISION:                V1.1
+#            HISTORY：                V1.1--- remove "-it" from "docker run" and add "-d"
 #
 #
 #            Test:
@@ -51,7 +51,7 @@ pipeline {
             steps {
               sh 'echo "Building..."'
               sh 'ssh root@192.168.19.133 docker stop tomcat8'
-              sh 'ssh root@192.168.19.133 docker run -it --rm -p 8888:8080 --name tomcat8 -v /tmp/ROOT:/usr/local/tomcat/webapps/ROOT tomcat:8.0 ' 
+              sh 'ssh root@192.168.19.133 docker run -d --rm -p 8888:8080 --name tomcat8 -v /tmp/ROOT:/usr/local/tomcat/webapps/ROOT tomcat:8.0 ' 
               sh 'echo "Done! And Cleaning..."'
             }
           }
