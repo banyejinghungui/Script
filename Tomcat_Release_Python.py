@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-import git, os, shutil
-import subprocess
+import git, os, shutil, logging, subprocess
+
+logging.basicConfig(filename='/usr/local/logs/tomcat_release.log',level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 DIR_NAME = "/tmp/ROOT"
 REMOTE_URL = "https://github.com/banyejinghungui/ROOT.git"
@@ -21,20 +23,26 @@ origin = repo.create_remote('origin',REMOTE_URL)
 origin.fetch()
 origin.pull(origin.refs[0].remote_head)
 
-print "--- Git Clone DONE ---"
+
+logger.info('Git Cloning')
+
 
 
 # STOP Tomcat
 subprocess.call([TOMCAT_SHUTDOWN])
-print "--- Stop Tomcat  ---"
+
+logger.info('Stop Tomcat')
 
 # Replace Old Code with New Code
 shutil.rmtree(TOMCAT_PATH)
-print "--- Remove webapps/ROOT ---"
+
+logger.info('Remove webapps/ROOT')
 shutil.move(TMP_PATH,TOMCAT_PATH)
-print "--- Deploy new version ---"
+
+logger.info('Deploy new version')
 
 
 # START Tomcat
 subprocess.call([TOMCAT_STARTUP])
-print "--- Start Tomcat ---"
+
+logger.info('START Tomcat')
