@@ -10,7 +10,7 @@
 #            NOTES:
 #            AUTHOR:                  Chen
 #            CREATE:                  2017.12.02
-#            REVISION:                V2.3
+#            REVISION:                V2.4
 #            HISTORY：                
 #
 #
@@ -34,21 +34,21 @@ pipeline {
             }
           }
 
-          stage('Code Analyse'){
-            steps {
-              sh 'echo "Run some lints"'
-            }
-          }
-
           stage('Unit Test'){
             steps {
-              sh 'echo "Tests will back"'
+              sh 'echo "Unit testing"'
             }
           }
 
           stage('Build'){
             steps {
-              sh 'echo "Building..."'
+              sh 'echo "Building"'
+            }
+          }
+
+          stage('Deploy'){
+            steps {
+              sh 'echo "Deploying..."'
               sh 'ssh root@192.168.19.131 source /etc/profile'
               sh 'ssh root@192.168.19.131 sh /usr/local/tomcat8_8080/bin/shutdown.sh'
               sh 'ssh root@192.168.19.131 rm -rf  /usr/local/tomcat8_8080/webapps/ROOT'
